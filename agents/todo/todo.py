@@ -149,49 +149,6 @@ class Todo:
             print(msg)
             return self.feedback(user, msg)
 
-    @Message(tags=["show-lists"])
-    def show_lists(self, user):
-        """ Show all the list available to the user. """
-        user_dir = path(TODO_PATH, user)
-
-        if not os.path.isdir(user_dir):
-            msg = "There are no lists"
-            print(msg)
-            return self.feedback(user, msg)
-
-        msg = "\n".join(os.listdir(user_dir))
-        return self.feedback(user, msg)
-
-    @Message(tags=["show-tasks"])
-    def show_tasks(self, user, tlist=None):
-        """ Show tasks in the specified list.
-
-            If no list is specified, show in current list.
-        """
-        if not tlist:
-            current = self.get_current(user)
-
-            if not current:
-                msg = "Did not find current active list"
-                print(msg)
-                return self.feedback(user, msg)
-
-            if not self.list_exists(user, current):
-                msg = "List does not exist"
-                print(msg)
-                return self.feedback(user, msg)
-
-        else:
-            current = tlist
-
-        tasks = self.read_list(user, current)
-
-        msg = ""
-        for index, task in enumerate(tasks):
-            msg += index + ".- " + task + "\n"
-
-        return self.feedback(user, msg)
-
     @Message(tags=["remove-list"])
     def remove_list(self, user, tlist):
         """ Remove the specified list. """
@@ -239,6 +196,49 @@ class Todo:
             msg = "Task %s does not exist" % task_num
             print(msg)
             return self.feedback(user, msg)
+
+    @Message(tags=["show-lists"])
+    def show_lists(self, user):
+        """ Show all the list available to the user. """
+        user_dir = path(TODO_PATH, user)
+
+        if not os.path.isdir(user_dir):
+            msg = "There are no lists"
+            print(msg)
+            return self.feedback(user, msg)
+
+        msg = "\n".join(os.listdir(user_dir))
+        return self.feedback(user, msg)
+
+    @Message(tags=["show-tasks"])
+    def show_tasks(self, user, tlist=None):
+        """ Show tasks in the specified list.
+
+            If no list is specified, show in current list.
+        """
+        if not tlist:
+            current = self.get_current(user)
+
+            if not current:
+                msg = "Did not find current active list"
+                print(msg)
+                return self.feedback(user, msg)
+
+            if not self.list_exists(user, current):
+                msg = "List does not exist"
+                print(msg)
+                return self.feedback(user, msg)
+
+        else:
+            current = tlist
+
+        tasks = self.read_list(user, current)
+
+        msg = ""
+        for index, task in enumerate(tasks):
+            msg += index + ".- " + task + "\n"
+
+        return self.feedback(user, msg)
 
     def feedback(self, user, message):
         """ Send a feedback message to the user through Jabber.
