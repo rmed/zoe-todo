@@ -255,7 +255,7 @@ class Todo:
             msg += "%d.- %s\n" % (index, task)
 
         if not msg:
-            msg = "There are no tasks" % current
+            msg = "There are no tasks"
 
         msg = "Tasks in list '%s'\n-------\n" % current + msg
 
