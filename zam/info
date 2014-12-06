@@ -1,0 +1,6 @@
+agent = todo
+version = 0.1.0
+license = MIT
+maintainer = Rafael Medina García <rafamedgar@gmail.com>
+script = todo.py
+description = Task lists for Zoe
