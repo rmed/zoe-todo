@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# Zoe Agent Manager - https://github.com/RMed/zoe_agent_manager
+# Zoe Todo - https://github.com/rmed/zoe-todo
 #
 # Copyright (c) 2014 Rafael Medina García <rafamedgar@gmail.com>
 #
@@ -56,7 +56,7 @@ GetOptions("get" => \$get,
            "st" => \$show_tasks_current,
            "stl" => \$show_tasks_list,
            "um" => \$unmark,
-           "integer" => \$task_num,
+           "integer=s" => \$task_num,
            "string=s" => \@strings);
 
 if ($get) {
@@ -123,6 +123,7 @@ sub add {
 #
 sub change {
   print("message dst=todo&tag=change-current&user=$sender&new_current=$strings[0]\n");
+}
 
 #
 # Create new list

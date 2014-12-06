@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Zoe Agent Manager - https://github.com/RMed/zoe_agent_manager
+# Zoe Todo - https://github.com/rmed/zoe-todo
 #
 # Copyright (c) 2014 Rafael Medina García <rafamedgar@gmail.com>
 #
@@ -42,7 +42,7 @@ class Todo:
     @Message(tags=["add-task"])
     def add_task(self, user, task):
         """ Add a task to current list. """
-        current = self.read_current(user)
+        current = self.get_current(user)
 
         if not current:
             msg = "Did not find current active list"
@@ -56,7 +56,7 @@ class Todo:
 
         tasks = self.read_list(user, current)
 
-        tasks.append(task)
+        tasks.append("[ ] " + task)
 
         self.write_list(tasks, user, current)
 
@@ -68,6 +68,7 @@ class Todo:
 
             If the list does not exist, it will be created.
         """
+        self.check_dir(user)
         list_path = path(TODO_PATH, user, new_current)
 
         if not os.path.isfile(list_path):
@@ -84,6 +85,7 @@ class Todo:
 
             If the list already exist, creation will be cancelled.
         """
+        self.check_dir(user)
         list_path = path(TODO_PATH, user, new_list)
 
         if os.path.isfile(list_path):
@@ -104,7 +106,7 @@ class Todo:
 
             The task is searched by index number.
         """
-        current = self.read_current(user)
+        current = self.get_current(user)
 
         if not current:
             msg = "Did not find current active list"
@@ -140,7 +142,7 @@ class Todo:
 
             self.write_list(tasks, user, current)
 
-            msg = "Changed mark on task %s" % task_num
+            msg = "Changed mark on task '%s'" % marked[4:]
             print(msg)
             return self.feedback(user, msg)
 
@@ -153,7 +155,7 @@ class Todo:
     def remove_list(self, user, tlist):
         """ Remove the specified list. """
         list_path = path(TODO_PATH, user, tlist)
-        if not self.list_exists(user, current):
+        if not self.list_exists(user, tlist):
             msg = "List does not exist"
             print(msg)
             return self.feedback(user, msg)
@@ -162,6 +164,10 @@ class Todo:
 
         os.remove(list_path)
 
+        current = self.get_current(user)
+        if current == tlist:
+            self.set_current(user, "")
+
         msg = "Removed list '%s'" % tlist
         print(msg)
         return self.feedback(user, msg)
@@ -169,7 +175,7 @@ class Todo:
     @Message(tags=["remove-task"])
     def remove_task(self, user, task_num):
         """ Remove a task from the current list. """
-        current = self.read_current(user)
+        current = self.get_current(user)
 
         if not current:
             msg = "Did not find current active list"
@@ -201,13 +207,23 @@ class Todo:
     def show_lists(self, user):
         """ Show all the list available to the user. """
         user_dir = path(TODO_PATH, user)
+        current = self.get_current(user)
 
         if not os.path.isdir(user_dir):
             msg = "There are no lists"
             print(msg)
             return self.feedback(user, msg)
 
-        msg = "\n".join(os.listdir(user_dir))
+        msg = ""
+        for d in os.listdir(user_dir):
+            if d == current:
+                msg += "-> %s\n" % d
+            else:
+                msg += "%s\n" % d
+
+        if not msg:
+            msg = "There are no lists"
+
         return self.feedback(user, msg)
 
     @Message(tags=["show-tasks"])
@@ -236,9 +252,23 @@ class Todo:
 
         msg = ""
         for index, task in enumerate(tasks):
-            msg += index + ".- " + task + "\n"
+            msg += "%d.- %s\n" % (index, task)
+
+        if not msg:
+            msg = "There are no tasks" % current
+
+        msg = "Tasks in list '%s'\n-------\n" % current + msg
 
         return self.feedback(user, msg)
+
+    def check_dir(self, user):
+        """ Check if the user has a directory inside the todo tree and
+            create it if it is not present.
+        """
+        user_path = path(TODO_PATH, user)
+
+        if not os.path.isdir(user_path):
+            os.mkdir(user_path)
 
     def feedback(self, user, message):
         """ Send a feedback message to the user through Jabber.
@@ -286,6 +316,8 @@ class Todo:
         """ Read the list for the specified user line by line and return
             all the tasks.
         """
+        list_path = path(TODO_PATH, user, tlist)
+
         with open(list_path, "r") as ulist:
             tasks = ulist.read().splitlines()
 
@@ -312,4 +344,5 @@ class Todo:
         list_path = path(TODO_PATH, user, tlist)
 
         with open(list_path, "w") as ulist:
-            ulist.writelines(sorted(tasks))
+            for task in sorted(tasks):
+                ulist.write("%s\n" % task)
