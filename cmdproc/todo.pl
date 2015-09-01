@@ -40,24 +40,26 @@ my $show_tasks_list;
 my $unmark;
 
 my $sender;
+my $src;
 my $task_num;
 my @strings;
 
-GetOptions("get" => \$get,
-           "run" => \$run,
-           "msg-sender-uniqueid=s" => \$sender,
-           "a" => \$add,
-           "ch" => \$change,
-           "cl" => \$create,
-           "m" => \$mark,
-           "rl" => \$remove_list,
-           "rt" => \$remove_task,
-           "sl" => \$show_lists,
-           "st" => \$show_tasks_current,
-           "stl" => \$show_tasks_list,
-           "um" => \$unmark,
-           "integer=s" => \$task_num,
-           "string=s" => \@strings);
+GetOptions("get"                    => \$get,
+           "run"                    => \$run,
+           "msg-sender-uniqueid=s"  => \$sender,
+           "msg-src=s"              => \$src,
+           "a"                      => \$add,
+           "ch"                     => \$change,
+           "cl"                     => \$create,
+           "m"                      => \$mark,
+           "rl"                     => \$remove_list,
+           "rt"                     => \$remove_task,
+           "sl"                     => \$show_lists,
+           "st"                     => \$show_tasks_current,
+           "stl"                    => \$show_tasks_list,
+           "um"                     => \$unmark,
+           "integer=s"              => \$task_num,
+           "string=s"               => \@strings);
 
 if ($get) {
   &get;
@@ -115,68 +117,68 @@ sub get {
 # Add a task to the list
 #
 sub add {
-  print("message dst=todo&tag=add-task&user=$sender&task=$strings[0]\n");
+  print("message dst=todo&tag=add-task&task=$strings[0]&sender=$sender&src=$src\n");
 }
 
 #
 # Change current list
 #
 sub change {
-  print("message dst=todo&tag=change-current&user=$sender&new_current=$strings[0]\n");
+  print("message dst=todo&tag=change-current&new_current=$strings[0]&sender=$sender&src=$src\n");
 }
 
 #
 # Create new list
 #
 sub create {
-  print("message dst=todo&tag=create-list&user=$sender&new_list=$strings[0]\n");
+  print("message dst=todo&tag=create-list&new_list=$strings[0]&sender=$sender&src=$src\n");
 }
 
 #
 # Mark a task
 #
 sub mark {
-  print("message dst=todo&tag=mark&user=$sender&task_num=$task_num&mark=1\n");
+  print("message dst=todo&tag=mark&task_num=$task_num&mark=1&sender=$sender&src=$src\n");
 }
 
 #
 # Remove a list
 #
 sub remove_list {
-  print("message dst=todo&tag=remove-list&user=$sender&tlist=$strings[0]\n");
+  print("message dst=todo&tag=remove-list&tlist=$strings[0]&sender=$sender&src=$src\n");
 }
 
 #
 # Remove a task
 #
 sub remove_task {
-  print("message dst=todo&tag=remove-task&user=$sender&task_num=$task_num\n");
+  print("message dst=todo&tag=remove-task&task_num=$task_num&sender=$sender&src=$src\n");
 }
 
 #
 # Show all lists owned by the user
 #
 sub show_lists {
-  print("message dst=todo&tag=show-lists&user=$sender\n");
+  print("message dst=todo&tag=show-lists&sender=$sender&src=$src\n");
 }
 
 #
 # Show all the tasks in current list
 #
 sub show_tasks_current {
-  print("message dst=todo&tag=show-tasks&user=$sender\n");
+  print("message dst=todo&tag=show-tasks&sender=$sender&src=$src\n");
 }
 
 #
 # Show all the tasks in specified list
 #
 sub show_tasks_list {
-  print("message dst=todo&tag=show-tasks&user=$sender&tlist=$strings[0]\n");
+  print("message dst=todo&tag=show-tasks&tlist=$strings[0]&sender=$sender&src=$src\n");
 }
 
 #
 # Unmark a task
 #
 sub unmark {
-  print("message dst=todo&tag=mark&user=$sender&task_num=$task_num&mark=0\n");
+  print("message dst=todo&tag=mark&task_num=$task_num&mark=0&sender=$sender&src=$src\n");
 }

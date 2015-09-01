@@ -40,36 +40,36 @@ TODO_PATH = path(env["ZOE_HOME"], "etc", "todo")
 class Todo:
 
     @Message(tags=["add-task"])
-    def add_task(self, user, task):
+    def add_task(self, task, sender, src):
         """ Add a task to current list. """
-        current = self.get_current(user)
+        current = self.get_current(sender)
 
         if not current:
             msg = "Did not find current active list"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        if not self.list_exists(user, current):
+        if not self.list_exists(sender, current):
             msg = "List does not exist"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        tasks = self.read_list(user, current)
+        tasks = self.read_list(sender, current)
 
         tasks.append("[ ] " + task)
 
-        self.write_list(tasks, user, current)
+        self.write_list(tasks, sender, current)
 
-        return self.feedback(user, "Added task '%s' to list" % task)
+        return self.feedback("Added task '%s' to list" % task, sender, src)
 
     @Message(tags=["change-current"])
-    def change_current(self, user, new_current):
+    def change_current(self, new_current, sender, src):
         """ Change currently active list for the user.
 
             If the list does not exist, it will be created.
         """
-        self.check_dir(user)
-        list_path = path(TODO_PATH, user, new_current)
+        self.check_dir(sender)
+        list_path = path(TODO_PATH, sender, new_current)
 
         if not os.path.isfile(list_path):
             with open(list_path, "w"):
@@ -77,48 +77,48 @@ class Todo:
 
         self.set_current(user, new_current)
 
-        return self.feedback(user, "Changed to list '%s'" % new_current)
+        return self.feedback("Changed to list '%s'" % new_current, sender, src)
 
     @Message(tags=["create-list"])
-    def create_list(self, user, new_list):
+    def create_list(self, new_list, sender, src):
         """ Create a new empty list.
 
             If the list already exist, creation will be cancelled.
         """
-        self.check_dir(user)
-        list_path = path(TODO_PATH, user, new_list)
+        self.check_dir(sender)
+        list_path = path(TODO_PATH, sender, new_list)
 
         if os.path.isfile(list_path):
             msg = "List '%s' already exists" % new_list
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
         with open(list_path, "w"):
             pass
 
         msg = "Created new list '%s'" % new_list
         print(msg)
-        return self.feedback(user, msg)
+        return self.feedback(msg, sender, src)
 
     @Message(tags=["mark"])
-    def mark_task(self, user, task_num, mark):
+    def mark_task(self, task_num, mark, sender, src):
         """ Mark or unmark a given task in current list.
 
             The task is searched by index number.
         """
-        current = self.get_current(user)
+        current = self.get_current(sender)
 
         if not current:
             msg = "Did not find current active list"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        if not self.list_exists(user, current):
+        if not self.list_exists(sender, current):
             msg = "List does not exist"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        tasks = self.read_list(user, current)
+        tasks = self.read_list(sender, current)
 
         try:
             original = tasks[int(task_num)]
@@ -136,83 +136,83 @@ class Todo:
                 # Not recognized
                 msg = "Mark not recognized"
                 print(msg)
-                return self.feedback(user, msg)
+                return self.feedback(msg, sender, src)
 
             tasks.append(marked)
 
-            self.write_list(tasks, user, current)
+            self.write_list(tasks, sender, current)
 
             msg = "Changed mark on task '%s'" % marked[4:]
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
         except IndexError:
             msg = "Task %s does not exist" % task_num
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
     @Message(tags=["remove-list"])
-    def remove_list(self, user, tlist):
+    def remove_list(self, tlist, sender, src):
         """ Remove the specified list. """
-        list_path = path(TODO_PATH, user, tlist)
-        if not self.list_exists(user, tlist):
+        list_path = path(TODO_PATH, sender, tlist)
+        if not self.list_exists(sender, tlist):
             msg = "List does not exist"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        list_path = path(TODO_PATH, user, tlist)
+        list_path = path(TODO_PATH, sender, tlist)
 
         os.remove(list_path)
 
-        current = self.get_current(user)
+        current = self.get_current(sender)
         if current == tlist:
-            self.set_current(user, "")
+            self.set_current(sender, "")
 
         msg = "Removed list '%s'" % tlist
         print(msg)
-        return self.feedback(user, msg)
+        return self.feedback(msg, sender, src)
 
     @Message(tags=["remove-task"])
-    def remove_task(self, user, task_num):
+    def remove_task(self, task_num, sender, src):
         """ Remove a task from the current list. """
-        current = self.get_current(user)
+        current = self.get_current(sender)
 
         if not current:
             msg = "Did not find current active list"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        if not self.list_exists(user, current):
+        if not self.list_exists(sender, current):
             msg = "List does not exist"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
-        tasks = self.read_list(user, current)
+        tasks = self.read_list(sender, current)
 
         try:
             tasks.pop(int(task_num))
 
-            self.write_list(tasks, user, current)
+            self.write_list(tasks, sender, current)
 
             msg = "Removed task %s" % task_num
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
         except IndexError:
             msg = "Task %s does not exist" % task_num
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
     @Message(tags=["show-lists"])
-    def show_lists(self, user):
+    def show_lists(self, sender, src):
         """ Show all the list available to the user. """
-        user_dir = path(TODO_PATH, user)
-        current = self.get_current(user)
+        user_dir = path(TODO_PATH, sender)
+        current = self.get_current(sender)
 
         if not os.path.isdir(user_dir):
             msg = "There are no lists"
             print(msg)
-            return self.feedback(user, msg)
+            return self.feedback(msg, sender, src)
 
         msg = ""
         for d in os.listdir(user_dir):
@@ -224,31 +224,31 @@ class Todo:
         if not msg:
             msg = "There are no lists"
 
-        return self.feedback(user, msg)
+        return self.feedback(msg, sender, src)
 
     @Message(tags=["show-tasks"])
-    def show_tasks(self, user, tlist=None):
+    def show_tasks(self, sender, src, tlist=None):
         """ Show tasks in the specified list.
 
             If no list is specified, show in current list.
         """
         if not tlist:
-            current = self.get_current(user)
+            current = self.get_current(sender)
 
             if not current:
                 msg = "Did not find current active list"
                 print(msg)
-                return self.feedback(user, msg)
+                return self.feedback(msg, sender, src)
 
-            if not self.list_exists(user, current):
+            if not self.list_exists(sender, current):
                 msg = "List does not exist"
                 print(msg)
-                return self.feedback(user, msg)
+                return self.feedback(msg, sender, src)
 
         else:
             current = tlist
 
-        tasks = self.read_list(user, current)
+        tasks = self.read_list(sender, current)
 
         msg = ""
         for index, task in enumerate(tasks):
@@ -259,7 +259,7 @@ class Todo:
 
         msg = "Tasks in list '%s'\n-------\n" % current + msg
 
-        return self.feedback(user, msg)
+        return self.feedback(msg, sender, src)
 
     def check_dir(self, user):
         """ Check if the user has a directory inside the todo tree and
@@ -270,17 +270,17 @@ class Todo:
         if not os.path.isdir(user_path):
             os.mkdir(user_path)
 
-    def feedback(self, user, message):
+    def feedback(self, message, user, dst):
         """ Send a feedback message to the user through Jabber.
 
-            user -- user to send the message to. User is obtained from the
+            message - message to send
+            user    - user to send the message to. User is obtained from the
                 natural language script.
-            message -- message to send
+            dst     - medium to send the message through ('jabber' or 'tg')
         """
         to_send = {
             "dst": "relay",
-            "tag": "relay",
-            "relayto": "jabber",
+            "relayto": dst,
             "to": user,
             "msg": message
         }
