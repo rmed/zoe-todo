@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 12:46+0200\n"
-"PO-Revision-Date: 2015-09-02 12:46+0200\n"
+"PO-Revision-Date: 2015-09-02 12:48+0200\n"
 "Last-Translator: Rafael Medina García <rafamedgar@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -55,7 +55,7 @@ msgstr "Marca no reconocida"
 #: agents/todo/todo.py:151
 #, python-format
 msgid "Changed mark on task '%s'"
-msgstr "Cambiada la marka de la tarea '%s'"
+msgstr "Cambiada la marca de la tarea '%s'"
 
 #: agents/todo/todo.py:155 agents/todo/todo.py:200
 #, python-format
