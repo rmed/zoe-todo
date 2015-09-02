@@ -32,6 +32,7 @@ from configparser import ConfigParser
 from os import environ as env
 from os.path import join as path
 from zoe.deco import *
+from zoe.model.users import Users
 
 gettext.install("todo")
 
@@ -52,6 +53,8 @@ class Todo:
     @Message(tags=["add-task"])
     def add_task(self, task, sender, src):
         """ Add a task to current list. """
+        self.set_locale(sender)
+
         current = self.get_current(sender)
 
         if not current:
@@ -74,6 +77,8 @@ class Todo:
 
             If the list does not exist, it will be created.
         """
+        self.set_locale(sender)
+
         self.check_dir(sender)
         list_path = path(TODO_PATH, sender, new_current)
 
@@ -92,6 +97,8 @@ class Todo:
 
             If the list already exist, creation will be cancelled.
         """
+        self.set_locale(sender)
+
         self.check_dir(sender)
         list_path = path(TODO_PATH, sender, new_list)
 
@@ -111,6 +118,8 @@ class Todo:
 
             The task is searched by index number.
         """
+        self.set_locale(sender)
+
         current = self.get_current(sender)
 
         if not current:
@@ -151,6 +160,8 @@ class Todo:
     @Message(tags=["remove-list"])
     def remove_list(self, tlist, sender, src):
         """ Remove the specified list. """
+        self.set_locale(sender)
+
         if not self.list_exists(sender, tlist):
             return self.feedback(MSG_LIST_NOT_EXIST, sender, src)
 
@@ -167,6 +178,8 @@ class Todo:
     @Message(tags=["remove-task"])
     def remove_task(self, task_num, sender, src):
         """ Remove a task from the current list. """
+        self.set_locale(sender)
+
         current = self.get_current(sender)
 
         if not current:
@@ -191,6 +204,8 @@ class Todo:
     @Message(tags=["show-lists"])
     def show_lists(self, sender, src):
         """ Show all the list available to the user. """
+        self.set_locale(sender)
+
         user_dir = path(TODO_PATH, sender)
         current = self.get_current(sender)
 
@@ -215,6 +230,8 @@ class Todo:
 
             If no list is specified, show in current list.
         """
+        self.set_locale(sender)
+
         if not tlist:
             current = self.get_current(sender)
 
@@ -314,6 +331,24 @@ class Todo:
 
         with open(TODO_CURRENT, "w") as list_file:
             conf.write(list_file)
+
+    def set_locale(self, user):
+        """ Set the locale for messages based on the locale of the sender.
+
+            If no locale is provided, Zoe's default locale is used or
+            English (en) is used by default.
+        """
+        if not user:
+            locale = ZOE_LOCALE
+
+        else:
+            conf = Users().subject(user)
+            locale = conf.get("locale", ZOE_LOCALE)
+
+        lang = gettext.translation("todo", localedir=LOCALEDIR,
+            languages=[locale,])
+
+        lang.install()
 
     def write_list(self, tasks, user, tlist):
         """ Write back a list of tasks to the specified list.
