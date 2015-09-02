@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
 touch ${ZOE_HOME}/etc/current_todo.conf
-mkdir ${ZOE_HOME}/etc/todo
+mkdir -p ${ZOE_HOME}/etc/todo
