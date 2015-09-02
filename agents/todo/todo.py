@@ -39,10 +39,6 @@ gettext.install("todo")
 LOCALEDIR = path(env["ZOE_HOME"], "locale")
 ZOE_LOCALE = env["ZOE_LOCALE"] or "en"
 
-MSG_CURRENT_NOT_FOUND = _("Did not find current active list")
-MSG_LIST_NOT_EXIST = _("List does not exist")
-MSG_NO_LISTS = _("There are no lists")
-
 TODO_CURRENT = path(env["ZOE_HOME"], "etc", "current_todo.conf")
 TODO_PATH = path(env["ZOE_HOME"], "etc", "todo")
 
@@ -58,10 +54,11 @@ class Todo:
         current = self.get_current(sender)
 
         if not current:
-            return self.feedback(MSG_CURRENT_NOT_FOUND, sender, src)
+            return self.feedback(_("Did not find current active list"),
+                sender, src)
 
         if not self.list_exists(sender, current):
-            return self.feedback(MSG_LIST_NOT_EXIST, sender, src)
+            return self.feedback(_("List does not exist"), sender, src)
 
         tasks = self.read_list(sender, current)
 
@@ -86,7 +83,7 @@ class Todo:
             with open(list_path, "w"):
                 pass
 
-        self.set_current(user, new_current)
+        self.set_current(sender, new_current)
 
         return self.feedback(_("Changed to list '%s'") % new_current,
             sender, src)
@@ -123,10 +120,11 @@ class Todo:
         current = self.get_current(sender)
 
         if not current:
-            return self.feedback(MSG_CURRENT_NOT_FOUND, sender, src)
+            return self.feedback(_("Did not find current active list"),
+                sender, src)
 
         if not self.list_exists(sender, current):
-            return self.feedback(MSG_LIST_NOT_EXIST, sender, src)
+            return self.feedback(_("List does not exist"), sender, src)
 
         tasks = self.read_list(sender, current)
 
@@ -163,7 +161,7 @@ class Todo:
         self.set_locale(sender)
 
         if not self.list_exists(sender, tlist):
-            return self.feedback(MSG_LIST_NOT_EXIST, sender, src)
+            return self.feedback(_("List does not exist"), sender, src)
 
         list_path = path(TODO_PATH, sender, tlist)
 
@@ -183,10 +181,11 @@ class Todo:
         current = self.get_current(sender)
 
         if not current:
-            return self.feedback(MSG_CURRENT_NOT_FOUND, sender, src)
+            return self.feedback(_("Did not find current active list"),
+                sender, src)
 
         if not self.list_exists(sender, current):
-            return self.feedback(MSG_LIST_NOT_EXIST, sender, src)
+            return self.feedback(_("List does not exist"), sender, src)
 
         tasks = self.read_list(sender, current)
 
@@ -210,7 +209,7 @@ class Todo:
         current = self.get_current(sender)
 
         if not os.path.isdir(user_dir):
-            return self.feedback(MSG_NO_LISTS, sender, src)
+            return self.feedback(_("There are no lists"), sender, src)
 
         msg = ""
         for d in os.listdir(user_dir):
@@ -220,7 +219,7 @@ class Todo:
                 msg += "%s\n" % d
 
         if not msg:
-            msg = MSG_NO_LISTS
+            msg = _("There are no lists")
 
         return self.feedback(msg, sender, src)
 
@@ -236,10 +235,11 @@ class Todo:
             current = self.get_current(sender)
 
             if not current:
-                return self.feedback(MSG_CURRENT_NOT_FOUND, sender, src)
+                return self.feedback(_("Did not find current active list"),
+                    sender, src)
 
             if not self.list_exists(sender, current):
-                return self.feedback(MSG_LIST_NOT_EXIST, sender, src)
+                return self.feedback(_("List does not exist"), sender, src)
 
         else:
             current = tlist

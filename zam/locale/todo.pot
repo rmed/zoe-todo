@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 12:24+0200\n"
+"POT-Creation-Date: 2015-09-02 12:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: agents/todo/todo.py:41
+#: agents/todo/todo.py:57 agents/todo/todo.py:123 agents/todo/todo.py:184
+#: agents/todo/todo.py:238
 msgid "Did not find current active list"
 msgstr ""
 
-#: agents/todo/todo.py:42
+#: agents/todo/todo.py:61 agents/todo/todo.py:127 agents/todo/todo.py:164
+#: agents/todo/todo.py:188 agents/todo/todo.py:242
 msgid "List does not exist"
-msgstr ""
-
-#: agents/todo/todo.py:43
-msgid "There are no lists"
 msgstr ""
 
 #: agents/todo/todo.py:69
@@ -34,50 +32,54 @@ msgstr ""
 msgid "Added task '%s' to list"
 msgstr ""
 
-#: agents/todo/todo.py:86
+#: agents/todo/todo.py:88
 #, python-format
 msgid "Changed to list '%s'"
 msgstr ""
 
-#: agents/todo/todo.py:99
+#: agents/todo/todo.py:103
 #, python-format
 msgid "List '%s' already exists"
 msgstr ""
 
-#: agents/todo/todo.py:105
+#: agents/todo/todo.py:109
 #, python-format
 msgid "Created new list '%s'"
 msgstr ""
 
-#: agents/todo/todo.py:138
+#: agents/todo/todo.py:145
 msgid "Mark not recognized"
 msgstr ""
 
-#: agents/todo/todo.py:144
+#: agents/todo/todo.py:151
 #, python-format
 msgid "Changed mark on task '%s'"
 msgstr ""
 
-#: agents/todo/todo.py:148 agents/todo/todo.py:188
+#: agents/todo/todo.py:155 agents/todo/todo.py:200
 #, python-format
 msgid "Task %s does not exist"
 msgstr ""
 
-#: agents/todo/todo.py:165
+#: agents/todo/todo.py:174
 #, python-format
 msgid "Removed list '%s'"
 msgstr ""
 
-#: agents/todo/todo.py:185
+#: agents/todo/todo.py:197
 #, python-format
 msgid "Removed task %s"
 msgstr ""
 
-#: agents/todo/todo.py:237
+#: agents/todo/todo.py:212 agents/todo/todo.py:222
+msgid "There are no lists"
+msgstr ""
+
+#: agents/todo/todo.py:254
 msgid "There are no tasks"
 msgstr ""
 
-#: agents/todo/todo.py:239
+#: agents/todo/todo.py:256
 #, python-format
 msgid ""
 "Tasks in list '%s'\n"
