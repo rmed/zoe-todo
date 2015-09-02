@@ -32,7 +32,7 @@ from configparser import ConfigParser
 from os import environ as env
 from os.path import join as path
 from zoe.deco import *
-from zoe.model.users import Users
+from zoe.models.users import Users
 
 gettext.install("todo")
 
