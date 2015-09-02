@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-02 12:24+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: agents/todo/todo.py:41
+msgid "Did not find current active list"
+msgstr ""
+
+#: agents/todo/todo.py:42
+msgid "List does not exist"
+msgstr ""
+
+#: agents/todo/todo.py:43
+msgid "There are no lists"
+msgstr ""
+
+#: agents/todo/todo.py:69
+#, python-format
+msgid "Added task '%s' to list"
+msgstr ""
+
+#: agents/todo/todo.py:86
+#, python-format
+msgid "Changed to list '%s'"
+msgstr ""
+
+#: agents/todo/todo.py:99
+#, python-format
+msgid "List '%s' already exists"
+msgstr ""
+
+#: agents/todo/todo.py:105
+#, python-format
+msgid "Created new list '%s'"
+msgstr ""
+
+#: agents/todo/todo.py:138
+msgid "Mark not recognized"
+msgstr ""
+
+#: agents/todo/todo.py:144
+#, python-format
+msgid "Changed mark on task '%s'"
+msgstr ""
+
+#: agents/todo/todo.py:148 agents/todo/todo.py:188
+#, python-format
+msgid "Task %s does not exist"
+msgstr ""
+
+#: agents/todo/todo.py:165
+#, python-format
+msgid "Removed list '%s'"
+msgstr ""
+
+#: agents/todo/todo.py:185
+#, python-format
+msgid "Removed task %s"
+msgstr ""
+
+#: agents/todo/todo.py:237
+msgid "There are no tasks"
+msgstr ""
+
+#: agents/todo/todo.py:239
+#, python-format
+msgid ""
+"Tasks in list '%s'\n"
+"-------\n"
+msgstr ""
